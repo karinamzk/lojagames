@@ -70,16 +70,6 @@ namespace lojagames.Service.Implements
             return Produto;
         }
 
-        public async Task<IEnumerable<Produto?>> GetByPreco(decimal precoInicial, decimal precoFinal)
-        {
-            var produto = await _Context.Produtos
-               .Include(p => p.Categoria)
-               .Where(p => p.Preco >= precoInicial && p.Preco <= precoFinal)
-               .ToListAsync();
-
-            return produto;
-        }
-
         public async Task<Produto?> Update(Produto produto)
         {
             var ProdutoUpdate = await _Context.Produtos.FindAsync(produto.Id);
@@ -104,6 +94,16 @@ namespace lojagames.Service.Implements
 
             return produto;
 
+        }
+
+        public async Task<IEnumerable<Produto>> GetByBetweenPreco(decimal precoInicial, decimal precoFinal)
+        {
+            var produto = await _Context.Produtos
+               .Include(p => p.Categoria)
+               .Where(p => p.Preco >= precoInicial && p.Preco <= precoFinal)
+               .ToListAsync();
+
+            return produto;
         }
     }
 }

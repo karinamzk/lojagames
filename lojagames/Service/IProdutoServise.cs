@@ -16,7 +16,7 @@ namespace lojagames.Service
 
         Task Delete(Produto produto);
 
-        Task<Produto?> GetByPreco(decimal precoInicial, decimal precoFinal);
+        Task<IEnumerable<Produto>> GetByBetweenPreco(decimal precoInicial, decimal precoFinal);
 
     }
 }

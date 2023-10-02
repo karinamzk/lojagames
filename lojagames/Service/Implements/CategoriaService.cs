@@ -51,7 +51,7 @@ namespace lojagames.Service.Implements
         public async Task<IEnumerable<Categoria>> GetByTipo(string tipo)
         {
             var Categoria = await _Context.Categorias
-                .Include(p => p.Produto)
+                .Include(c => c.Produto)
                 .Where(p => p.Tipo.Contains(tipo))
                 .ToListAsync();
 
