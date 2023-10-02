@@ -31,6 +31,11 @@ namespace lojagames.Validator
                   .NotEmpty()
                   .MinimumLength(5)
                   .MaximumLength(255);
+
+            RuleFor(p => p.Preco)
+                .NotNull()
+                .GreaterThan(0)
+                .PrecisionScale(20, 2, false); ;
         }
     }
 }

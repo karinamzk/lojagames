@@ -14,33 +14,62 @@ namespace lojagames.Service.Implements
 
         public async Task<IEnumerable<Categoria>> GettAll()
         {
-            throw new NotImplementedException();
+            return await _Context.Categorias
+                .Include(c => c.Produto)
+                .ToListAsync();
         }
-        public Task<Categoria?> Create(Categoria categoria)
+        public async Task<Categoria?> Create(Categoria categoria)
         {
-            throw new NotImplementedException();
-        }
+            await _Context.Categorias.AddAsync(categoria);
+            await _Context.SaveChangesAsync();
 
-        public Task Delete(Categoria categoria)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<Categoria?> GetById(long id)
-        {
-            throw new NotImplementedException();
+            return categoria;
         }
 
-        public Task<IEnumerable<Categoria>> GetByTipo(string tipo)
+        public async Task Delete(Categoria categoria)
         {
-            throw new NotImplementedException();
+            _Context.Categorias.Remove(categoria);
+            await _Context.SaveChangesAsync();
         }
 
-      
-
-        public Task<Categoria?> Update(Categoria categoria)
+        public async Task<Categoria?> GetById(long id)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var Categoria = await _Context.Categorias
+                     .Include(c => c.Produto)
+                     .FirstAsync(i => i.Id == id);
+
+                return Categoria;
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
+        public async Task<IEnumerable<Categoria>> GetByTipo(string tipo)
+        {
+            var Categoria = await _Context.Categorias
+                .Include(p => p.Produto)
+                .Where(p => p.Tipo.Contains(tipo))
+                .ToListAsync();
+
+            return Categoria;
+        }
+
+        public async Task<Categoria?> Update(Categoria categoria)
+        {
+            var CategoriUpdate = await _Context.Categorias.FindAsync(categoria.Id);
+
+            if (CategoriUpdate is null)
+                return null;
+
+            _Context.Entry(CategoriUpdate).State = EntityState.Detached;
+            _Context.Entry(categoria).State = EntityState.Modified;
+            await _Context.SaveChangesAsync();
+
+            return categoria;
         }
     }
 }

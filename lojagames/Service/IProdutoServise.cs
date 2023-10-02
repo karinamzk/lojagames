@@ -16,7 +16,7 @@ namespace lojagames.Service
 
         Task Delete(Produto produto);
 
-        Task<Produto?> GetByPreco(Produto preco);
+        Task<Produto?> GetByPreco(decimal precoInicial, decimal precoFinal);
 
     }
 }

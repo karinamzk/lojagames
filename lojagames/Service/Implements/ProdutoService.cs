@@ -15,29 +15,27 @@ namespace lojagames.Service.Implements
 
         public async Task<IEnumerable<Produto>> GettAll()
         {
-            return await _Context.Produtos.ToListAsync();
-              
+            return await _Context.Produtos
+                .Include(p => p.Categoria)
+                .ToListAsync();
         }
         public async Task<Produto?> Create(Produto produto)
         {
-
-            throw new NotImplementedException();
-
-            /*if (produto.Categoria is not null)
+            if (produto.Categoria is not null)
             {
-                var BuscarTema = await _Context.Temas.FindAsync(produto.Descricao.Id);
+                var BuscaCategoria = await _Context.Categorias
+                    .FindAsync(produto.Categoria.Id);
 
-                if (BuscarTema is null)
+                if (BuscaCategoria is null)
                     return null;
-                
-            } */
-            /*
-            produto.Categoria = produto.Categoria is not null ? _Context.Categoria.FirstOrDefault
-            (t => t.Id == produto.Descricao.Id) : null;
+
+                produto.Categoria = BuscaCategoria;
+
+            }
             await _Context.Produtos.AddAsync(produto);
             await _Context.SaveChangesAsync();
 
-            return produto; */
+            return produto;
         }
 
         public async Task Delete(Produto produto)
@@ -46,24 +44,66 @@ namespace lojagames.Service.Implements
             await _Context.SaveChangesAsync();  
         }
 
-        public Task<Produto?> GetById(long id)
+        public async Task<Produto?> GetById(long id)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var Produto = await _Context.Produtos
+                    .Include(p => p.Categoria)
+                    .FirstAsync(i => i.Id == id);
+
+                return Produto;
+            }
+            catch 
+            {
+                return null;
+            }
         }
 
-        public Task<IEnumerable<Produto>> GetByNome(string titulo)
+        public async Task<IEnumerable<Produto>> GetByNome(string nome)
         {
-            throw new NotImplementedException();
+            var Produto = await _Context.Produtos
+                    .Include(p => p.Categoria)
+                    .Where(p => p.Nome.Contains(nome))
+                    .ToListAsync();
+
+            return Produto;
         }
 
-        public Task<Produto?> GetByPreco(Produto produto)
+        public async Task<IEnumerable<Produto?>> GetByPreco(decimal precoInicial, decimal precoFinal)
         {
-            throw new NotImplementedException();
+            var produto = await _Context.Produtos
+               .Include(p => p.Categoria)
+               .Where(p => p.Preco >= precoInicial && p.Preco <= precoFinal)
+               .ToListAsync();
+
+            return produto;
         }
 
-        public Task<Produto?> Update(Produto produto)
+        public async Task<Produto?> Update(Produto produto)
         {
-            throw new NotImplementedException();
+            var ProdutoUpdate = await _Context.Produtos.FindAsync(produto.Id);
+
+            if (ProdutoUpdate is not null)
+                return null;
+
+            if (produto.Categoria is not null)
+            {
+                var BuscaCategoria = await _Context.Categorias.FindAsync(produto.Categoria.Id);
+
+                if (BuscaCategoria is null)
+                    return null;
+
+                produto.Categoria = BuscaCategoria;
+
+            }
+
+            _Context.Entry(ProdutoUpdate).State = EntityState.Detached;
+            _Context.Entry(produto).State = EntityState.Modified;
+            await _Context.SaveChangesAsync();
+
+            return produto;
+
         }
     }
 }

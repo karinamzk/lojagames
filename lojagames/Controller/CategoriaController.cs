@@ -54,7 +54,7 @@ namespace lojagames.Controller
             if (!validarCategoria.IsValid)
                 return StatusCode(StatusCodes.Status400BadRequest, validarCategoria);
 
-            /*var Resposta = await _categoriaService.Create(categoria);*/
+            var Resposta = await _categoriaService.Create(categoria);
             return CreatedAtAction(nameof(GetById), new { id = categoria.Id }, categoria);
         }
 

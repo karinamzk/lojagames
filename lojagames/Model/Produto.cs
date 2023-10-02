@@ -1,9 +1,11 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
+using Newtonsoft.Json;
+using lojagames.Util;
 
 namespace lojagames.Model
 {
-    public class Produto
+    public class Produto 
     {
        
         [Key]
@@ -11,7 +13,7 @@ namespace lojagames.Model
         public long Id { get; set; }
 
         [Column(TypeName = "varchar")]
-        [StringLength(100)]
+        [StringLength(255)]
         public string Nome { get; set; } = string.Empty;
 
         [Column(TypeName = "varchar")]
@@ -19,19 +21,18 @@ namespace lojagames.Model
         public string Descricao { get; set; } = string.Empty;
 
         [Column(TypeName = "varchar")]
-        [StringLength(100)]
+        [StringLength(255)]
         public string Console { get; set; } = string.Empty;
 
         [Column(TypeName = "varchar")]
-        [StringLength(100)]
+        [JsonConverter(typeof(DateOnlyJsonConverter))]
         public string Data { get; set; } = string.Empty;
 
         [Column(TypeName = "decimal(10,2)")]
-        [StringLength(100)]
         public decimal Preco { get; set; }
 
         [Column(TypeName = "varchar")]
-        [StringLength(200)]
+        [StringLength(5000)]
         public string Foto { get; set; } = string.Empty;
 
         public virtual Categoria? Categoria { get; set; }

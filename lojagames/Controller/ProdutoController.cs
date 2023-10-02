@@ -49,10 +49,10 @@ namespace lojagames.Controller
         [HttpPost]
         public async Task<ActionResult> Create([FromBody] Produto produto)
         {
-            var validarPostagem = await _produtoValidator.ValidateAsync(produto);
+            var validarProduto = await _produtoValidator.ValidateAsync(produto);
 
-            if (!validarPostagem.IsValid)
-                return StatusCode(StatusCodes.Status400BadRequest, validarPostagem);
+            if (!validarProduto.IsValid)
+                return StatusCode(StatusCodes.Status400BadRequest, validarProduto);
 
             var Resposta = await _produtoService.Create(produto);
 
@@ -69,10 +69,10 @@ namespace lojagames.Controller
             if (produto.Id == 0)
                 return BadRequest("Id da Produto é inválido!");
 
-            var validarPostagem = await _produtoValidator.ValidateAsync(produto);
+            var validarProduto = await _produtoValidator.ValidateAsync(produto);
 
-            if (!validarPostagem.IsValid)
-                return StatusCode(StatusCodes.Status400BadRequest, validarPostagem);
+            if (!validarProduto.IsValid)
+                return StatusCode(StatusCodes.Status400BadRequest, validarProduto);
 
             var Resposta = await _produtoService.Update(produto);
 

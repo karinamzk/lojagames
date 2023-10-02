@@ -18,6 +18,16 @@ namespace lojagames
 
             builder.Services.AddControllers();
 
+            // Add Controller Class
+            builder.Services.AddControllers()
+                .AddNewtonsoftJson(options =>
+                {
+                    options.SerializerSettings.ReferenceLoopHandling =
+                    Newtonsoft.Json.ReferenceLoopHandling.Ignore;
+                }
+
+             );
+
             // Conexão com o Banco de dados
             var connectionString = builder.Configuration.
                     GetConnectionString("DefaultConnection");
