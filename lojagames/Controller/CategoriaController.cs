@@ -1,10 +1,13 @@
 ﻿using FluentValidation;
 using lojagames.Model;
 using lojagames.Service;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace lojagames.Controller
 {
+
+    [Authorize]
     [Route("~/categorias")] // Rota feita na URL
     [ApiController] //Identificar que é uma clase controladora 
     public class CategoriaController : ControllerBase 

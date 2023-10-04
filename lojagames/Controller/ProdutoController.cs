@@ -1,11 +1,13 @@
 ﻿using FluentValidation;
 using lojagames.Model;
 using lojagames.Service;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 
 namespace lojagames.Controller
 {
+    [Authorize]
     [Route("~/produtos")] 
     [ApiController]
     public class ProdutoController : ControllerBase

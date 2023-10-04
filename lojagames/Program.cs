@@ -5,6 +5,11 @@ using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using lojagames.Service.Implements;
 using lojagames.Service;
+using lojagames.Security;
+using lojagames.Security.Implements;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 namespace lojagames
 {
@@ -39,14 +44,37 @@ namespace lojagames
             // Validação das Entidades
             builder.Services.AddTransient<IValidator<Produto>, ProdutoValidator>();
             builder.Services.AddTransient<IValidator<Categoria>, CategoriaValidator>();
+            builder.Services.AddTransient<IValidator<User>, UserValidator>();
 
             // Registrar as Classes e Interfaces Service
             builder.Services.AddScoped<IProdutoServise, ProdutoService>();
             builder.Services.AddScoped<ICategoriaService, CategoriaService>();
+            builder.Services.AddScoped<IUserService, UserService>();
+            builder.Services.AddScoped<IAuthService, AuthService>();
 
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
+
+            // Adicionar a Validação do Token JWT
+
+            builder.Services.AddAuthentication(x =>
+            {
+                x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).AddJwtBearer(o =>
+            {
+                var Key = Encoding.UTF8.GetBytes(Settings.Secret);
+                o.SaveToken = true;
+                o.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuer = false,
+                    ValidateAudience = false,
+                    ValidateLifetime = true,
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(Key)
+                };
+            });
 
             // Configuração do CORS -> ADICIONAR ESSE ITEM 
             builder.Services.AddCors(options => {
@@ -78,8 +106,13 @@ namespace lojagames
             }
 
             app.UseCors("MyPolicy"); //ADICIONAR ESSE ITEM 
+            // Habilitar a Autenticação e a Autorização
+
+            app.UseAuthentication();
 
             app.UseAuthorization();
+
+            //Habilitar Controller
 
             app.MapControllers();
 
