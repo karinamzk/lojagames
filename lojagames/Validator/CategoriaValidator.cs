@@ -9,10 +9,6 @@ namespace lojagames.Validator
         {
             RuleFor(c => c.Tipo)
                   .NotEmpty();
-                  
-
-
-
         }
     }
 }

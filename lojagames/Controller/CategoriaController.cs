@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace lojagames.Controller
 {
-    [Route("~/categoria")] // Rota feita na URL
+    [Route("~/categorias")] // Rota feita na URL
     [ApiController] //Identificar que é uma clase controladora 
     public class CategoriaController : ControllerBase 
     {
@@ -40,7 +40,7 @@ namespace lojagames.Controller
             return Ok(Resposta);
         }
 
-        [HttpGet("nome/{nome}")]
+        [HttpGet("tipo/{tipo}")]
         public async Task<ActionResult> GetByTipo(string tipo)
         {
             return Ok(await _categoriaService.GetByTipo(tipo));

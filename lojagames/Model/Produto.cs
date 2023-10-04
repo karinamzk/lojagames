@@ -24,9 +24,9 @@ namespace lojagames.Model
         [StringLength(255)]
         public string Console { get; set; } = string.Empty;
 
-        [Column(TypeName = "varchar")]
+        [Column(TypeName = "date")]
         [JsonConverter(typeof(DateOnlyJsonConverter))]
-        public string Data { get; set; } = string.Empty;
+        public DateTime Data { get; set; } 
 
         [Column(TypeName = "decimal(10,2)")]
         public decimal Preco { get; set; }

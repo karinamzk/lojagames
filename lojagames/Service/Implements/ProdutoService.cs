@@ -74,7 +74,7 @@ namespace lojagames.Service.Implements
         {
             var ProdutoUpdate = await _Context.Produtos.FindAsync(produto.Id);
 
-            if (ProdutoUpdate is not null)
+            if (ProdutoUpdate is null)
                 return null;
 
             if (produto.Categoria is not null)

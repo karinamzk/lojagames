@@ -3,6 +3,7 @@ using lojagames.Model;
 using lojagames.Service;
 using Microsoft.AspNetCore.Mvc;
 
+
 namespace lojagames.Controller
 {
     [Route("~/produtos")] 
@@ -67,7 +68,7 @@ namespace lojagames.Controller
         public async Task<ActionResult> Update([FromBody] Produto produto)
         {
             if (produto.Id == 0)
-                return BadRequest("Id da Produto é inválido!");
+                return BadRequest("Id do Produto é inválido!");
 
             var validarProduto = await _produtoValidator.ValidateAsync(produto);
 
@@ -88,7 +89,7 @@ namespace lojagames.Controller
             var BuscaProduto = await _produtoService.GetById(id);
 
             if (BuscaProduto is null)
-                return NotFound("Produto não foi encontrada1");
+                return NotFound("Produto não foi encontrada");
 
             await _produtoService.Delete(BuscaProduto);
 
